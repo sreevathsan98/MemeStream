@@ -3,6 +3,9 @@ var bodyParser = require("body-parser");
 var mongodb = require("mongodb");
 var ObjectID = mongodb.ObjectID;
 
+var cors = require('cors');
+var app = express();
+
 var CONTACTS_COLLECTION = "memes";
 
 var app = express();
