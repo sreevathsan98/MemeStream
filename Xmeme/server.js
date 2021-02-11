@@ -13,7 +13,18 @@ app.use(bodyParser.json());
 
 // Create a database variable outside of the database connection callback to reuse the connection pool in your app.
 var db;
-
+app.use((req,res,next)=>{
+  res.header("Access-Control-Allow-Origin","*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  if(req.Method==='OPTIONS'){
+    res.header('Access-Control-Allow-Methods','PUT, POST, PATCH, DELETE, GET');
+    return res.status(200).json({});
+  }
+  next();
+})
 // Connect to the database before starting the application server.
 mongodb.MongoClient.connect(process.env.MONGODB_URI,{useNewUrlParser: true, useUnifiedTopology: true}, function (err, client) {
   if (err) {
