@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 var db;
 
 // Connect to the database before starting the application server.
-mongodb.MongoClient.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/test", function (err, client) {
+mongodb.MongoClient.connect(process.env.MONGODB_URI,{useNewUrlParser: true, useUnifiedTopology: true}, function (err, client) {
   if (err) {
     console.log(err);
     process.exit(1);
@@ -32,15 +32,27 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI || "mongodb://localhost:2701
   });
 });
 
-app.use(cors());
+app.use((req,res,next)=>{
+  res.header("Access-Control-Allow-Origin","*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  if(req.Method==='OPTIONS'){
+    res.header('Access-Control-Allow-Methods','PUT, POST, PATCH, DELETE, GET');
+    return res.status(200).json({});
+  }
+  next();
+})
+
 function handleError(res, reason, message, code) {
     console.log("ERROR: " + reason);
     res.status(code || 500).json({"error": message});
   }
 
 
-  app.options('*', cors())
-  app.get("/memes",cors(),function(req, res) {
+  
+  app.get("/memes",function(req, res) {
     db.collection(CONTACTS_COLLECTION).find({}).toArray(function(err, docs) {
       if (err) {
         handleError(res, err.message, "Failed to get contacts.");
@@ -50,8 +62,7 @@ function handleError(res, reason, message, code) {
     });
   });
 
-  app.options('*', cors())
-  app.post("/memes",cors(),function(req, res) {
+  app.post("/memes",function(req, res) {
     var newContact = req.body;
     //newContact.createDate = new Date();
   
@@ -62,7 +73,9 @@ function handleError(res, reason, message, code) {
         if (err) {
           handleError(res, err.message, "Failed to create new contact.");
         } else {
-          res.status(201).json(doc.ops[0]);
+          res.status(201).json({
+            id:req.body.id,
+          });
         }
       });
       db.collection(CONTACTS_COLLECTION).find({newContact}).toArray(function(err, docs) {
