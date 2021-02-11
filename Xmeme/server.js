@@ -36,8 +36,8 @@ function handleError(res, reason, message, code) {
     console.log("ERROR: " + reason);
     res.status(code || 500).json({"error": message});
   }
-  app.use(cors());
-  app.get("/memes", function(req, res) {
+  app.options('*', cors())
+  app.get("/memes",cors(), function(req, res) {
     db.collection(CONTACTS_COLLECTION).find({}).toArray(function(err, docs) {
       if (err) {
         handleError(res, err.message, "Failed to get contacts.");
@@ -47,8 +47,8 @@ function handleError(res, reason, message, code) {
     });
   });
   
-  app.use(cors());
-  app.post("/memes", function(req, res) {
+  app.options('*', cors())
+  app.post("/memes",cors(), function(req, res) {
     var newContact = req.body;
     //newContact.createDate = new Date();
   
