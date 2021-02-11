@@ -47,6 +47,7 @@ function handleError(res, reason, message, code) {
     });
   });
   
+  app.use(cors());
   app.post("/memes", function(req, res) {
     var newContact = req.body;
     //newContact.createDate = new Date();
