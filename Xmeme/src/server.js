@@ -99,7 +99,11 @@ function handleError(res, reason, message, code) {
   app.post("/memes",function(req, res) {
     var newContact = req.body;
     //newContact.createDate = new Date();
-  
+    res.header("Access-Control-Allow-Origin","*");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    );
     if (!req.body.name) {
       handleError(res, "Invalid user input", "Must provide a name.", 400);
     } else {
