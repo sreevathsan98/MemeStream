@@ -10,9 +10,6 @@ var CONTACTS_COLLECTION = "memes";
 
 var app = express();
 app.use(bodyParser.json());
-
-// Create a database variable outside of the database connection callback to reuse the connection pool in your app.
-var db;
 app.use((req,res,next)=>{
   res.header("Access-Control-Allow-Origin","*");
   res.header(
@@ -25,6 +22,9 @@ app.use((req,res,next)=>{
   }
   next();
 })
+// Create a database variable outside of the database connection callback to reuse the connection pool in your app.
+var db;
+
 // Connect to the database before starting the application server.
 mongodb.MongoClient.connect(process.env.MONGODB_URI,{useNewUrlParser: true, useUnifiedTopology: true}, function (err, client) {
   if (err) {
@@ -43,18 +43,6 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI,{useNewUrlParser: true, useU
   });
 });
 
-app.use((req,res,next)=>{
-  res.header("Access-Control-Allow-Origin","*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  if(req.Method==='OPTIONS'){
-    res.header('Access-Control-Allow-Methods','PUT, POST, PATCH, DELETE, GET');
-    return res.status(200).json({});
-  }
-  next();
-})
 
 function handleError(res, reason, message, code) {
     console.log("ERROR: " + reason);
@@ -62,18 +50,7 @@ function handleError(res, reason, message, code) {
   }
 
 
-  app.use((req,res,next)=>{
-    res.header("Access-Control-Allow-Origin","*");
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-    );
-    if(req.Method==='OPTIONS'){
-      res.header('Access-Control-Allow-Methods','PUT, POST, PATCH, DELETE, GET');
-      return res.status(200).json({});
-    }
-    next();
-  })
+  
   app.get("/memes",function(req, res) {
     db.collection(CONTACTS_COLLECTION).find({}).toArray(function(err, docs) {
       if (err) {
@@ -84,18 +61,8 @@ function handleError(res, reason, message, code) {
     });
   });
 
-  app.use((req,res,next)=>{
-    res.header("Access-Control-Allow-Origin","*");
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-    );
-    if(req.Method==='OPTIONS'){
-      res.header('Access-Control-Allow-Methods','PUT, POST, PATCH, DELETE, GET');
-      return res.status(200).json({});
-    }
-    next();
-  })
+  
+  
   app.post("/memes",function(req, res) {
     var newContact = req.body;
     //newContact.createDate = new Date();
