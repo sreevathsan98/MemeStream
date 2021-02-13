@@ -1,0 +1,25 @@
+
+h2{
+  text-align: center;
+}
+
+ i{
+  font-size:larger;
+  color:  #1d6f42;
+ }
+ mat-dialog-actions{
+    
+    margin-left: 27%;
+    margin-right: 20%;
+    margin-top: 10%;
+    margin-bottom: 0;
+ }
+
+ .mat-dialog-content {
+  display: block;
+  margin: 0 0px;
+  padding: 0 22px;
+  max-height: 107vh;
+  overflow: hidden; 
+}
+
