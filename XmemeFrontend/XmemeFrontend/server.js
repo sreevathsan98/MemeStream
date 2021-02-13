@@ -1,9 +1,16 @@
-var express = require("express");
-var bodyParser = require("body-parser");
+//Install express server
+const express = require('express');
+const path = require('path');
 
-var app = express();
-app.use(bodyParser.json());
+const app = express();
 
-// Create link to Angular build directory
-var distDir = __dirname + "/dist/";
-app.use(express.static(distDir));
+// Serve only the static files form the dist directory
+app.use(express.static(__dirname + '/dist/XmemeFrontend'));
+
+app.get('/*', function(req,res) {
+    
+res.sendFile(path.join(__dirname+'/dist/XmemeFrontend/index.html'));
+});
+
+// Start the app by listening on the default Heroku port
+app.listen(process.env.PORT || 8080);
