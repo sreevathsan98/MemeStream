@@ -11,3 +11,8 @@ Frontend - Built using Angular Framework, Html, Css
 Backend - Built using Node, Express and Mongo DB
 
 Feel free to go through the code!!!
+
+
+Frontend Deployed link - https://memestream-sreevathsan.herokuapp.com/
+
+Backend Deployed link - https://sreevathsan-nodeapi.herokuapp.com/memes
